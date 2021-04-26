@@ -20,35 +20,82 @@ const LorryReceipt = ({lrDetails}) => {
             </div>
 
             <div style={{flex: 1, textAlign: "end"}}>
-              <div>Mob No: 396493874</div> <div>LR No: {lrDetails.lrNo}</div>
-              <div>VC ID: {lrDetails.vcId}</div>
+              <div>
+                <span style={{fontWeight: 600}}>Mob No:</span> 396493874
+              </div>
+              <div>
+                <span style={{fontWeight: 600}}>LR No: </span>
+                {lrDetails.lrNo}
+              </div>
+              <div>
+                <span style={{fontWeight: 600}}>VC ID: </span>
+                {lrDetails.vcId}
+              </div>
             </div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
-            <div style={{flex: 0.8}}>Consignor:</div>
+            <div style={{flex: 0.8, fontWeight: 600}}>Consignor:</div>
             <div style={{flex: 3}}>{lrDetails.consigner}</div>
             <div style={{flex: 1, textAlign: "end"}}>
-              Date: {lrDetails.date}
+              <span style={{fontWeight: 600}}>Date:</span> {lrDetails.date}
             </div>
           </div>
           <div style={{display: "flex", flexDirection: "row"}}>
-            <div style={{flex: 0.8}}>Consignee:</div>
+            <div style={{flex: 0.8, fontWeight: 600}}>Consignee:</div>
             <div style={{flex: 3}}>{lrDetails.consignee}</div>
             <div style={{flex: 1, textAlign: "end"}}>
-              Status: {lrDetails.status}
+              <span style={{fontWeight: 600}}>Status: </span> {lrDetails.status}
             </div>
           </div>
 
-          <div style={{display: "flex", flexDirection: "row"}}>
-            <div style={{flex: 1}}>Place of Loading:</div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <div style={{flex: 1, fontWeight: 600}}>Place of Loading:</div>
             <div style={{flex: 5}}>Azhad Nagar Road,Andheri,Mumbai</div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row"}}>
-            <div style={{flex: 1}}>Destination:</div>
+            <div style={{flex: 1, fontWeight: 600}}>Destination:</div>
             <div style={{flex: 5}}>St. Peter Road,Santacruz,Mumbai</div>
           </div>
+          <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
+            <table>
+              <tr>
+                <th className="lrDetails-th">Quantity</th>
+                <th className="lrDetails-th">Weight</th>
+                <th className="lrDetails-th">Description</th>
+                <th className="lrDetails-th"></th>
+                <th className="lrDetails-th">Freight charges</th>
+              </tr>
+              <tr>
+                <td rowSpan="3" className="lr-td-quantity">
+                  1
+                </td>
+                <td rowSpan="3" className="lr-td-quantity">
+                  200kg
+                </td>
+                <td rowSpan="3" className="lr-td-description">
+                  Description of Good
+                </td>
+                <td className="lr-td-fright">Freight</td>
+                <td className="lr-td-fright">500</td>
+              </tr>
+              <tr>
+                <td className="lr-td-fright">Advance</td>
+                <td className="lr-td-fright">200</td>
+              </tr>
+              <tr>
+                <td className="lr-td-fright">To Pay/Paid</td>
+                <td className="lr-td-fright">Pay : 300</td>
+              </tr>
+            </table>
+          </div>
+          <div style={{display: "flex", flexDirection: "row"}}></div>
         </div>
       ) : null}
     </>

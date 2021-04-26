@@ -12,7 +12,7 @@
 .heading {
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 21px;
   line-height: 36px;
   color: #000000;
 }
@@ -58,8 +58,22 @@
   margin-top: 20px;
   min-width: 450px;
   min-height: 450px;
-  max-height: 500px;
-  overflow-y: scroll;
+  max-height: 450px;
+  overflow-y: auto;
+}
+
+div::-webkit-scrollbar {
+  width: 12px;
+}
+div::-webkit-scrollbar-track {
+  background: #ffffff; /* color of the tracking area */
+  border-radius: 10px;
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: #dee2e6; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid #ffffff; /* creates padding around scroll thumb */
 }
 .header-img {
   max-height: 50px;
@@ -147,18 +161,6 @@ tbody::-webkit-scrollbar-thumb {
   text-decoration: underline;
   cursor: pointer;
 }
-.lrdetails-container {
-  width: 900px;
-  height: 450px;
-  background: #ffffff;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
-  border-radius: 0px;
-  padding: 40px 40px;
-  margin-left: 40px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
 .info {
   margin-left: 30px;
   color: #f1f1f8;
@@ -170,7 +172,7 @@ tbody::-webkit-scrollbar-thumb {
   width: 750px;
 }
 .footer {
-  height: 55px;
+  height: 45px;
   position: fixed;
   position: fixed;
   left: 0;
@@ -181,22 +183,38 @@ tbody::-webkit-scrollbar-thumb {
 }
 .footer-img {
   margin-right: 30px;
-  max-height: 40px;
+  max-height: 30px;
   float: right;
 }
 .poweredBy {
-  margin-bottom: -32px;
+  margin-bottom: -25px;
   text-align: right;
-  margin-right: 185px;
-  margin-top: 16px;
-  font-size: 18px;
+  margin-right: 150px;
+  margin-top: 10px;
+  font-size: 16px;
 }
 h1 {
   font-size: 3.1rem;
   font-family: -webkit-body;
 }
+.lrdetails-container {
+  width: 1200px;
+  height: 465px;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+  border-radius: 0px;
+  padding: 20px;
+  margin: 10px;
+}
+.lrdetails-header {
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #000000;
+}
+
 .lrDetails-content {
-  padding: 25px;
+  padding: 20px;
   border: 1px solid black;
   font-size: 14px;
 }
@@ -206,8 +224,46 @@ h1 {
 }
 .lrDetails-company {
   flex: 2;
-  font-size: 28px;
+  font-size: 23px;
+  font-weight: 600;
 }
 .lrDetails-address {
   font-size: 14px;
+  font-weight: 200;
+}
+.lr-td-quantity {
+  border: 1px solid;
+  min-width: 160px;
+  height: 150px;
+  padding: 10px;
+}
+.lr-td-description {
+  border: 1px solid;
+  min-width: 380px;
+  height: 100px;
+  padding: 10px;
+}
+.lr-td-fright {
+  min-width: 160px;
+  border: 1px solid;
+}
+.lrDetails-th {
+  border: 1px solid;
+  padding-left: 10px;
+}
+.generateLR-container {
+  width: 60%;
+  margin-left: 170px;
+  max-height: 460px;
+  overflow-y: scroll;
+  background-color: white;
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+}
+form {
+  padding: 35px;
+}
+.generateLRHeader {
+  padding: 30px;
 }

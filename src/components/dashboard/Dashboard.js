@@ -14,7 +14,11 @@ const Dashboard = () => {
       <Button
         className="dashboard-generate-lr"
         variant="light"
-        onClick={e => {}}
+        onClick={() =>
+          history.push({
+            pathname: "/generateLR",
+          })
+        }
       >
         Generate LR
       </Button>
@@ -59,7 +63,7 @@ const Dashboard = () => {
                     <Dropdown.Item id="Delivered">Delivered</Dropdown.Item>
                   </DropdownButton>
                 </td>
-                <td onClick={() => alert("download PDF of " + lr.lrNo)}>
+                <td onClick={() => console.log("download PDF of " + lr.lrNo)}>
                   <DownloadPDF lrDetails={lr} />
                 </td>
               </tr>

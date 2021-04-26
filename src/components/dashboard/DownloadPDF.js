@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {createGlobalStyle} from "styled-components";
-import {Link} from "react-router-dom";
 import {createPdfFromHtml} from "./GeneratePDF";
 import LorryReceipt from "./LorryReceipt";
 

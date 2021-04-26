@@ -11,6 +11,8 @@ import {Label} from "../common/Label";
 import {PasswordInput} from "../common/PasswordInput";
 import {SubmitButton} from "../common/SubmitButton";
 import {TextInput} from "../common/TextInput";
+import axios from 'axios';
+import {SIGNUP_URL} from "../common/Constant";
 
 const SignUp = ({setPage}) => {
   const [name, setName] = useState("");
@@ -26,6 +28,25 @@ const SignUp = ({setPage}) => {
     return name.length > 0;
   }
 
+  function signupAccount(e) {
+    e.preventDefault();
+    axios.post(SIGNUP_URL,
+      {
+        "fullName"     : name,
+        "mobileNumber" : mobileNo,
+        "address"      : address,
+        "password"     : password,
+        "role"         : role
+    })
+    .then((response) => {
+      console.log(response.data); 
+      
+    }, (error) => {
+      console.log(error);
+    });
+    
+  }
+
   return (
     <>
       <HeaderText value="SignUp" />
@@ -35,7 +56,7 @@ const SignUp = ({setPage}) => {
       </FormGroup>
       <FormGroup controlId="mobileNo">
         <Label value="Mobile No" />
-        <TextInput value={mobileNo} setValue={setMobileNo} />
+        <TextInput maxlength="10" value={mobileNo} setValue={setMobileNo} />
       </FormGroup>
 
       {otpVerified ? (
@@ -84,7 +105,10 @@ const SignUp = ({setPage}) => {
 
           <SubmitButton
             label="SignUp"
-            submitHandler={() => alert(address)}
+            validateForm={() => {
+              return true;
+            }}
+            submitHandler={signupAccount}
           ></SubmitButton>
         </>
       ) : (
@@ -96,12 +120,18 @@ const SignUp = ({setPage}) => {
               </FormGroup>
               <SubmitButton
                 label="Verify OTP"
+                validateForm={() => {
+                  return true;
+                }}
                 submitHandler={() => setOtpVerified(true)}
               ></SubmitButton>
             </>
           ) : (
             <SubmitButton
               label="Send OTP"
+              validateForm={() => {
+                return true;
+              }}
               submitHandler={() => setShowVerifyOtp(true)}
             ></SubmitButton>
           )}

@@ -1,5 +1,5 @@
 import React from "react";
-import icon from "./../../util/images/icon2.jpg";
+import icon from "./../../images/icon2.jpg";
 
 const LorryReceipt = ({lrDetails}) => {
   return (
@@ -12,40 +12,42 @@ const LorryReceipt = ({lrDetails}) => {
             </div>
 
             <div className="lrDetails-company">
-              Matarani Transport Service
+              {lrDetails.transporter.fullName}
               <div className="lrDetails-address">
-                Office: Main Market Road,Bandra,Maharashtra
-                <div>Vehicle No : 62893721</div>
+                {lrDetails.transporter.address}
               </div>
             </div>
 
             <div style={{flex: 1, textAlign: "end"}}>
               <div>
-                <span style={{fontWeight: 600}}>Mob No:</span> 396493874
+                <span style={{fontWeight: 600}}>Mob No:</span>{" "}
+                {lrDetails.transporter.mobileNumber}
               </div>
               <div>
                 <span style={{fontWeight: 600}}>LR No: </span>
-                {lrDetails.lrNo}
+                {lrDetails.lorryReceipt.receiptNumber}
               </div>
               <div>
                 <span style={{fontWeight: 600}}>VC ID: </span>
-                {lrDetails.vcId}
+                {lrDetails.vcId.replace("claimId:", "")}
               </div>
             </div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
             <div style={{flex: 0.8, fontWeight: 600}}>Consignor:</div>
-            <div style={{flex: 3}}>{lrDetails.consigner}</div>
+            <div style={{flex: 3}}>{lrDetails.consigner.fullName}</div>
             <div style={{flex: 1, textAlign: "end"}}>
-              <span style={{fontWeight: 600}}>Date:</span> {lrDetails.date}
+              <span style={{fontWeight: 600}}>Date:</span>{" "}
+              {lrDetails.lorryReceipt.createdAt}
             </div>
           </div>
           <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{flex: 0.8, fontWeight: 600}}>Consignee:</div>
-            <div style={{flex: 3}}>{lrDetails.consignee}</div>
+            <div style={{flex: 3}}>{lrDetails.consignee.fullName}</div>
             <div style={{flex: 1, textAlign: "end"}}>
-              <span style={{fontWeight: 600}}>Status: </span> {lrDetails.status}
+              <span style={{fontWeight: 600}}>Status: </span>
+              {lrDetails.lorryReceipt.status}
             </div>
           </div>
 
@@ -56,12 +58,12 @@ const LorryReceipt = ({lrDetails}) => {
             }}
           >
             <div style={{flex: 1, fontWeight: 600}}>Place of Loading:</div>
-            <div style={{flex: 5}}>Azhad Nagar Road,Andheri,Mumbai</div>
+            <div style={{flex: 5}}>{lrDetails.consigner.address}</div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{flex: 1, fontWeight: 600}}>Destination:</div>
-            <div style={{flex: 5}}>St. Peter Road,Santacruz,Mumbai</div>
+            <div style={{flex: 5}}>{lrDetails.consignee.address}</div>
           </div>
           <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
             <table>

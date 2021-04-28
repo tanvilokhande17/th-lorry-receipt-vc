@@ -75,7 +75,7 @@ export const DownloadPDF = ({lrDetails}) => {
       >
         Download PDF
       </div>
-      <div id="print" className="A4">
+      <div id="print" className="legal">
         <div style={{position: "fixed", top: "200vh"}}>
           <div ref={el => setPrintContent(el)}>
             <LorryReceipt lrDetails={lrDetails} />

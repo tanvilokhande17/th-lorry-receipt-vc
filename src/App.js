@@ -9,20 +9,18 @@ import generateLR from "./components/dashboard/GenerateLR";
 
 function App() {
   return (
-    <>
-      <div className="app-container">
-        <Header />
-        <Router>
-          <Switch>
-            <Route exact path="/" component={HomePage}></Route>
-            <Route path="/dashboard" component={Dashboard}></Route>
-            <Route path="/lr-details" component={LRDetails}></Route>
-            <Route path="/generateLR" component={generateLR}></Route>
-          </Switch>
-        </Router>
-        <Footer />
-      </div>
-    </>
+    <div className="app-container">
+      <Header />
+      <Router>
+        <Switch>
+          <Route exact path="/" component={HomePage}></Route>
+          <Route path="/dashboard" component={Dashboard}></Route>
+          <Route path="/lr-details" component={LRDetails}></Route>
+          <Route path="/generateLR" component={generateLR}></Route>
+        </Switch>
+      </Router>
+      <Footer />
+    </div>
   );
 }
 

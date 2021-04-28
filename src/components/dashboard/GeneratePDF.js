@@ -4,11 +4,11 @@ import pdfMake from "pdfmake/build/pdfmake";
 const RATE = 2.83464566929;
 
 // A3 297mm x 419mm
-const PAGE_WIDTH = 297 * RATE;
-const PAGE_HEIGHT = 419 * RATE;
+const PAGE_WIDTH = 210 * RATE;
+const PAGE_HEIGHT = 297 * RATE;
 
-const CONTENT_WIDTH = 297 * RATE;
-const CONTENT_HEIGHT = 419 * RATE;
+const CONTENT_WIDTH = 210 * RATE;
+const CONTENT_HEIGHT = 297 * RATE;
 const PAGE_MARGINS = [0 * RATE, 0 * RATE];
 
 /**

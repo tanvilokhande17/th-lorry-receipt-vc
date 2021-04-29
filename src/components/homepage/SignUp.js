@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FormGroup, Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import {HeaderText} from "../common/HeaderText";
 import {Label} from "../common/Label";
 import {PasswordInput} from "../common/PasswordInput";
@@ -8,7 +8,6 @@ import {TextInput} from "../common/TextInput";
 import axios from "axios";
 import {LOGIN_URL, SIGNUP_URL} from "../util/Constant";
 import RolesDropdown from "../common/RolesDropdown";
-import {useHistory} from "react-router";
 import {NumberInput} from "../common/NumberInput";
 import {saveUser} from "../util/User";
 
@@ -19,10 +18,9 @@ const SignUp = ({setPage}) => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Select Role");
+  const [role, setRole] = useState("Transporter");
   const [address, setAddress] = useState("");
   const [submitDisabled, setSubmitDisabled] = useState(true);
-  const history = useHistory();
 
   const signupAccount = e => {
     e.preventDefault();
@@ -39,8 +37,6 @@ const SignUp = ({setPage}) => {
         response => {
           console.log(response);
           if (response.status === 200) {
-            const res = response.data;
-
             axios
               .post(LOGIN_URL, {
                 mobileNumber: mobileNo,
@@ -57,21 +53,23 @@ const SignUp = ({setPage}) => {
 
                     saveUser(
                       res.user.fullName,
+                      mobileNo,
                       res.role,
                       res.accessToken,
                       true
                     );
-                    history.push("/dashboard");
+                    window.location.pathname = "/dashboard";
                   } else {
                     alert(response.data.message);
                   }
+                  setSubmitDisabled(false);
                 },
                 error => {
                   console.log(error);
+                  setSubmitDisabled(false);
                 }
               );
           }
-          setSubmitDisabled(false);
         },
         error => {
           console.log(error);
@@ -86,7 +84,7 @@ const SignUp = ({setPage}) => {
       mobileNo === "" ||
       password === "" ||
       address === "" ||
-      role === "Select Role"
+      role === ""
     )
       setSubmitDisabled(true);
     else setSubmitDisabled(false);
@@ -101,24 +99,24 @@ const SignUp = ({setPage}) => {
     else alert("Please enter valid mobile number.");
   };
   return (
-    <>
+    <Form>
       <HeaderText value="SignUp" />
-      <FormGroup controlId="name">
+      <Form.Group controlId="name">
         <Label value="Name" />
         <TextInput value={name} setValue={setName} />
-      </FormGroup>
-      <FormGroup controlId="mobileNo">
+      </Form.Group>
+      <Form.Group controlId="mobileNo">
         <Label value="Mobile No" />
         <NumberInput maxlength="10" value={mobileNo} setValue={setMobileNo} />
-      </FormGroup>
+      </Form.Group>
 
       {otpVerified ? (
         <>
-          <FormGroup controlId="password">
+          <Form.Group controlId="password">
             <Label value="Password" />
             <PasswordInput value={password} setValue={setPassword} />
-          </FormGroup>
-          <FormGroup controlId="address">
+          </Form.Group>
+          <Form.Group controlId="address">
             <Label value="Address" />
             <Form.Control
               as="textarea"
@@ -126,8 +124,8 @@ const SignUp = ({setPage}) => {
               value={address}
               onChange={e => setAddress(e.target.value)}
             />
-          </FormGroup>
-          <RolesDropdown role={role} setRole={setRole} />
+          </Form.Group>
+          <RolesDropdown setRole={setRole} />
 
           <SubmitButton
             disabled={submitDisabled}
@@ -139,9 +137,9 @@ const SignUp = ({setPage}) => {
         <>
           {showVerifyOtp ? (
             <>
-              <FormGroup controlId="otp">
+              <Form.Group controlId="otp">
                 <NumberInput value={otp} setValue={setOtp} />
-              </FormGroup>
+              </Form.Group>
               <SubmitButton
                 label="Verify OTP"
                 submitHandler={verifyOTP}
@@ -163,7 +161,7 @@ const SignUp = ({setPage}) => {
         </span>
         .
       </div>
-    </>
+    </Form>
   );
 };
 export default SignUp;

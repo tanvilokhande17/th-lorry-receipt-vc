@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 
-const Info = ({setPage}) => {
+const Info = () => {
   return (
     <div className="info">
       <p>

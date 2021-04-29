@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {createGlobalStyle} from "styled-components";
 import {createPdfFromHtml} from "./GeneratePDF";
 import LorryReceipt from "./LorryReceipt";
@@ -66,6 +66,8 @@ const Global = createGlobalStyle`
 
 export const DownloadPDF = ({lrDetails}) => {
   const [printContent, setPrintContent] = useState(1);
+
+  useEffect(() => console.log("DownloadPDF"));
   return (
     <>
       <Global />

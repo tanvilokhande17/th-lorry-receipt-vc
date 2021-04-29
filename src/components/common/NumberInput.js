@@ -1,12 +1,13 @@
 import React from "react";
-import {FormControl} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 
-export const NumberInput = ({value, setValue}) => {
+export const NumberInput = ({value, setValue, placeholder}) => {
   return (
-    <FormControl
+    <Form.Control
       autoFocus
       type="number"
       value={value}
+      placeholder={placeholder}
       onChange={e => setValue(e.target.value)}
     />
   );

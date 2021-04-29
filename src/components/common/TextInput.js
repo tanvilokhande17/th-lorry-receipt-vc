@@ -1,13 +1,14 @@
 import React from "react";
-import {FormControl} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 
-export const TextInput = ({value, setValue}) => {
+export const TextInput = ({value, setValue, placeholder}) => {
   return (
-    <FormControl
+    <Form.Control
       autoComplete="new-password"
       autoFocus
       type="text"
       value={value}
+      placeholder={placeholder}
       onChange={e => setValue(e.target.value)}
     />
   );

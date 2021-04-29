@@ -29,7 +29,9 @@ const LorryReceipt = ({lrDetails}) => {
               </div>
               <div>
                 <span style={{fontWeight: 600}}>VC ID: </span>
-                {lrDetails.vcId.replace("claimId:", "")}
+                {lrDetails.vcId !== undefined
+                  ? lrDetails.vcId.replace("claimId:", "")
+                  : null}
               </div>
             </div>
           </div>

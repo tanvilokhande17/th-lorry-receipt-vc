@@ -1,25 +1,29 @@
-import React, {useContext, useEffect, useState} from "react";
-import {FormGroup} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Form} from "react-bootstrap";
 import {HeaderText} from "../common/HeaderText";
 import {Label} from "../common/Label";
 import {PasswordInput} from "../common/PasswordInput";
 import {SubmitButton} from "../common/SubmitButton";
 import {NumberInput} from "../common/NumberInput";
-import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {LOGIN_URL} from "../util/Constant";
 import RolesDropdown from "../common/RolesDropdown";
-import {saveUser} from "../util/User";
+import {saveUser, getUser} from "../util/User";
 
 const Login = ({setPage}) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Select Role");
+  const [role, setRole] = useState("Transporter");
   const [submitDisabled, setSubmitDisabled] = useState(true);
-  const history = useHistory();
+  const user = getUser();
 
   useEffect(() => {
-    if (mobileNumber !== "" && password !== "" && role !== "Select Role")
+    if (user && user.isLogin === "true")
+      window.location.pathname = "/dashboard";
+  }, []);
+
+  useEffect(() => {
+    if (mobileNumber !== "" && password !== "" && role !== "")
       setSubmitDisabled(false);
     else setSubmitDisabled(true);
   }, [mobileNumber, password, role]);
@@ -42,8 +46,14 @@ const Login = ({setPage}) => {
             ) {
               const res = response.data;
 
-              saveUser(res.user.fullName, res.role, res.accessToken, true);
-              history.push("/dashboard");
+              saveUser(
+                res.user.fullName,
+                mobileNumber,
+                res.role,
+                res.accessToken,
+                true
+              );
+              window.location.pathname = "/dashboard";
             } else {
               alert(response.data.message);
             }
@@ -58,20 +68,20 @@ const Login = ({setPage}) => {
   };
 
   return (
-    <>
+    <Form>
       <div className="login-header">
         <HeaderText value="Login" />
       </div>
-      <FormGroup controlId="mobileNumber">
+      <Form.Group controlId="mobileNumber">
         <Label value="Mobile Number" />
         <NumberInput value={mobileNumber} setValue={setMobileNumber} />
-      </FormGroup>
+      </Form.Group>
 
-      <FormGroup controlId="password">
+      <Form.Group controlId="password">
         <Label value="Password" />
         <PasswordInput value={password} setValue={setPassword} />
-      </FormGroup>
-      <RolesDropdown role={role} setRole={setRole} />
+      </Form.Group>
+      <RolesDropdown setRole={setRole} />
       <SubmitButton
         label="Login"
         disabled={submitDisabled}
@@ -84,7 +94,7 @@ const Login = ({setPage}) => {
         </span>
         .
       </div>
-    </>
+    </Form>
   );
 };
 export default Login;

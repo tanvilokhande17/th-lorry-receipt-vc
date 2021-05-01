@@ -291,3 +291,10 @@ h1 {
 form {
   padding: 35px;
 }
+
+.lr-pdf-th {
+  min-width: 30px;
+  border: 0.5px solid;
+  max-width: 150px;
+  padding: 5px;
+}

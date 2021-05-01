@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Table} from "react-bootstrap";
 import {useHistory} from "react-router-dom";
-import {DownloadPDF} from "./DownloadPDF";
+import DownloadPDF from "../downloadPdf/DownloadPDF";
 import axios from "axios";
 import {LORRY_RECEIPT_URL, UPDATE_STATUS_URL} from "../util/Constant";
 import {getUser} from "../util/User";
@@ -129,7 +129,12 @@ const Dashboard = () => {
                       <option value="Delivered">Delivered</option>
                     </Form.Control>
                   </td>
-                  <td></td>
+                  <td>
+                    <DownloadPDF
+                      vcId={lr.vcId}
+                      status={lr.lorryReceipt.status}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>

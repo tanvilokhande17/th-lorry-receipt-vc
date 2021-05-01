@@ -1,24 +1,25 @@
 import React from "react";
 import icon from "./../../images/icon2.jpg";
 
-const LorryReceipt = ({lrDetails}) => {
+const LorryReceiptPDF = ({lrDetails}) => {
   return (
     <>
       {lrDetails ? (
-        <div className="lrDetails-content">
-          <div className="lrDetails-header">
+        <div style={{fontSize: 12, margin: 15}}>
+          <div style={{height: 15}}>&nbsp;</div>
+          <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{flex: 1}}>
-              <img style={{maxHeight: 75}} src={icon} />
+              <img style={{maxHeight: 45}} src={icon} />
             </div>
 
-            <div className="lrDetails-company">
-              {lrDetails.transporter.name}
-              <div className="lrDetails-address">
-                {lrDetails.transporter.address}
-              </div>
+            <div style={{flex: 3.5}}>
+              <span style={{fontSize: 14, fontWeight: 600}}>
+                Tanvi Lokhande Transport
+              </span>
+              <div>{lrDetails.transporter.address}</div>
             </div>
 
-            <div style={{flex: 1, textAlign: "end"}}>
+            <div style={{flex: 2, textAlign: "end"}}>
               <div>
                 <span style={{fontWeight: 600}}>Mob No: </span>
                 {lrDetails.transporter.mobileNumber}
@@ -27,11 +28,12 @@ const LorryReceipt = ({lrDetails}) => {
                 <span style={{fontWeight: 600}}>LR No: </span>
                 {lrDetails.receiptNumber}
               </div>
-              <div>
-                <span style={{fontWeight: 600}}>VC ID: </span>
-                {lrDetails.vcId}
-              </div>
             </div>
+          </div>
+
+          <div style={{textAlign: "end"}}>
+            <span style={{fontWeight: 600}}>VC ID: </span>
+            {lrDetails.vcId}
           </div>
 
           <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
@@ -56,36 +58,36 @@ const LorryReceipt = ({lrDetails}) => {
 
           <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{flex: 0.8, fontWeight: 600}}>Driver:</div>
-            <div style={{flex: 3}}>{lrDetails.driver.name}</div>
-            <div style={{flex: 1, textAlign: "end"}}>
+            <div style={{flex: 1}}>{lrDetails.driver.name}</div>
+            <div style={{flex: 3, textAlign: "end"}}>
               <span style={{fontWeight: 600}}>Vehicle Number: </span>
               {lrDetails.vehicleNumber}
             </div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row"}}>
-            <div style={{flex: 1, fontWeight: 600}}>Place of Loading:</div>
-            <div style={{flex: 5}}>{lrDetails.loadingAddress}</div>
+            <div style={{flex: 1.5, fontWeight: 600}}>Place of Loading:</div>
+            <div style={{flex: 4.5}}>{lrDetails.loadingAddress}</div>
           </div>
 
           <div style={{display: "flex", flexDirection: "row"}}>
-            <div style={{flex: 1, fontWeight: 600}}>Destination:</div>
-            <div style={{flex: 5}}>{lrDetails.unloadingAddress}</div>
+            <div style={{flex: 1.5, fontWeight: 600}}>Destination:</div>
+            <div style={{flex: 4.5}}>{lrDetails.unloadingAddress}</div>
           </div>
           <div style={{display: "flex", flexDirection: "row", marginTop: 15}}>
             <table>
               <thead>
                 <tr>
-                  <th className="lrDetails-th">Quantity</th>
-                  <th className="lrDetails-th">Weight</th>
-                  <th className="lrDetails-th">Description</th>
-                  <th className="lrDetails-th"></th>
-                  <th className="lrDetails-th">Freight charges</th>
+                  <th className="lr-pdf-th">Quantity</th>
+                  <th className="lr-pdf-th">Weight</th>
+                  <th className="lr-pdf-th">Description</th>
+                  <th className="lr-pdf-th"></th>
+                  <th className="lr-pdf-th">Freight charges</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td rowSpan="3" className="lr-td-quantity">
+                  <td className="lr-pdf-th" rowSpan="3">
                     {lrDetails.consignments.map((c, i) => (
                       <div key={i} style={{marginBottom: 10}}>
                         {c.quantity}
@@ -93,7 +95,7 @@ const LorryReceipt = ({lrDetails}) => {
                     ))}
                     <div>&nbsp;</div>
                   </td>
-                  <td rowSpan="3" className="lr-td-quantity">
+                  <td className="lr-pdf-th" rowSpan="3">
                     {lrDetails.consignments.map((c, i) => (
                       <div key={i} style={{marginBottom: 10}}>
                         {c.weight}
@@ -101,7 +103,7 @@ const LorryReceipt = ({lrDetails}) => {
                     ))}
                     <div>Total : {lrDetails.totalWeight}</div>
                   </td>
-                  <td rowSpan="3" className="lr-td-description">
+                  <td className="lr-pdf-th" rowSpan="3">
                     {lrDetails.consignments.map((c, i) => (
                       <div key={i} style={{marginBottom: 10}}>
                         {c.description}
@@ -110,31 +112,29 @@ const LorryReceipt = ({lrDetails}) => {
                     <div>&nbsp;</div>
                   </td>
 
-                  <td className="lr-td-fright">Freight</td>
-                  <td className="lr-td-fright">
+                  <td className="lr-pdf-th">Freight</td>
+                  <td className="lr-pdf-th">
                     {lrDetails.freightCharge.freight}
                   </td>
                 </tr>
                 <tr>
-                  <td className="lr-td-fright">Advance</td>
-                  <td className="lr-td-fright">
+                  <td className="lr-pdf-th">Advance</td>
+                  <td className="lr-pdf-th">
                     {lrDetails.freightCharge.advance}
                   </td>
                 </tr>
                 <tr>
-                  <td className="lr-td-fright">To Pay/Paid</td>
-                  <td className="lr-td-fright">
-                    {lrDetails.freightCharge.toPay}
-                  </td>
+                  <td className="lr-pdf-th">To Pay/Paid</td>
+                  <td className="lr-pdf-th">{lrDetails.freightCharge.toPay}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div style={{display: "flex", flexDirection: "row"}}></div>
+          <div style={{height: 15}}>&nbsp;</div>
         </div>
       ) : null}
     </>
   );
 };
 
-export default LorryReceipt;
+export default LorryReceiptPDF;

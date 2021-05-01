@@ -3,12 +3,12 @@ import pdfMake from "pdfmake/build/pdfmake";
 
 const RATE = 2.83464566929;
 
-// A3 297mm x 419mm
+// A4 210mm x 296mm
 const PAGE_WIDTH = 210 * RATE;
-const PAGE_HEIGHT = 297 * RATE;
+const PAGE_HEIGHT = 296 * RATE;
 
 const CONTENT_WIDTH = 210 * RATE;
-const CONTENT_HEIGHT = 297 * RATE;
+const CONTENT_HEIGHT = 296 * RATE;
 const PAGE_MARGINS = [0 * RATE, 0 * RATE];
 
 /**

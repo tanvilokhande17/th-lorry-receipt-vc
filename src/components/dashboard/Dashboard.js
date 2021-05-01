@@ -23,8 +23,11 @@ const Dashboard = () => {
               if (
                 response.data.lorryReceipts !== undefined &&
                 response.data.lorryReceipts !== null
-              )
-                setLRList(response.data.lorryReceipts);
+              ) {
+                const res = response.data.lorryReceipts;
+                const list = res.filter(f => f.vcId !== undefined);
+                setLRList(list);
+              }
             }
           },
           error => {
@@ -97,7 +100,8 @@ const Dashboard = () => {
                       history.push({
                         pathname: "/lr-details",
                         state: {
-                          lrDetails: lr,
+                          vcId: lr.vcId,
+                          status: lr.lorryReceipt.status,
                         },
                       })
                     }
@@ -125,9 +129,7 @@ const Dashboard = () => {
                       <option value="Delivered">Delivered</option>
                     </Form.Control>
                   </td>
-                  <td>
-                    <DownloadPDF lrDetails={lr}></DownloadPDF>
-                  </td>
+                  <td></td>
                 </tr>
               ))}
             </tbody>

@@ -5,7 +5,6 @@ import {Label} from "../common/Label";
 import {TextInput} from "../common/TextInput";
 import {NumberInput} from "../common/NumberInput";
 import {SubHeaderText} from "../common/SubHeaderText";
-import {SubmitButton} from "../common/SubmitButton";
 import Add from "../../images/add_icon.png";
 import {LORRY_RECEIPT_URL} from "../util/Constant";
 import axios from "axios";
@@ -34,16 +33,17 @@ const GenerateLR = ({}) => {
   }, []);
 
   const submitHandler = e => {
+    e.preventDefault();
     if (isValid()) {
       let totalWeight = 0;
       goodsDetails.map(good => {
-        totalWeight = totalWeight + good.weight;
+        totalWeight = Number(totalWeight) + Number(good.weight);
       });
 
       const param = {
         transporterMobileNumber: user.mobileNo,
         consignerMobileNumber: consignerNumber,
-        consigneeMobileNumber: consignerNumber,
+        consigneeMobileNumber: consigneeNumber,
         driverMobileNumber: driverMobileNumber,
         details: {
           vehicleNumber: vehicleNumber,
@@ -63,11 +63,10 @@ const GenerateLR = ({}) => {
         })
         .then(
           response => {
-            if (
-              response.status === 200 &&
-              response.data.message === "success"
-            ) {
+            console.log(response.data);
+            if (response.status === 200) {
               alert("Lorry Receipt Created Successfully!");
+              window.location.reload();
             } else {
               alert(response.data.errorMessage);
             }
@@ -77,7 +76,6 @@ const GenerateLR = ({}) => {
           }
         );
     } else {
-      e.preventDefault();
       alert("Please fill form");
     }
   };
@@ -105,7 +103,10 @@ const GenerateLR = ({}) => {
             <HeaderText value="Generate Lorry Reciept" />
           </Form.Group>
           <Form.Group as={Col}>
-            <Button style={{float: "right"}} onClick={() => history.goBack()}>
+            <Button
+              style={{float: "right"}}
+              onClick={() => (window.location.pathname = "/dashboard")}
+            >
               Back
             </Button>
           </Form.Group>

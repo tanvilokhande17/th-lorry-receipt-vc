@@ -2,31 +2,32 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
 import {useHistory, useLocation} from "react-router";
-import {WALLET_CREDENTIALS_URL} from "../util/Constant";
+import {WALLET_CREDENTIALS_URL, API_KEY} from "../util/Constant";
 import {getUser} from "../util/User";
 import LorryReceipt from "./LorryReceipt";
 
 const LRDetails = () => {
   const location = useLocation();
-  const lrDetails = location.state.lrDetails;
-  const [lrDetail, setLrDetail] = useState();
+  const {vcId, status} = location.state;
+  const [lrDetails, setLrDetails] = useState(null);
   const history = useHistory();
   const user = getUser();
 
   useEffect(() => {
-    if (lrDetails && lrDetails.vcId) {
+    if (vcId && lrDetails === null) {
       axios
-        .get(WALLET_CREDENTIALS_URL + lrDetails.vcId, {
-          headers: {Authorization: "Bearer " + user.accessToken},
+        .get(WALLET_CREDENTIALS_URL + vcId, {
+          headers: {
+            Authorization: "Bearer " + user.accessToken,
+            "Api-Key": API_KEY,
+          },
         })
         .then(
           response => {
             if (response.status === 200) {
-              if (
-                response.data.lorryReceipts !== undefined &&
-                response.data.lorryReceipts !== null
-              ) {
-              }
+              const res = response.data.credentialSubject.data;
+              setLrDetails({...res, vcId: vcId, status: status});
+              console.log(lrDetails);
             }
           },
           error => {
@@ -45,7 +46,7 @@ const LRDetails = () => {
         </Button>
       </div>
 
-      {lrDetails ? <LorryReceipt lrDetails={lrDetails} /> : null}
+      {lrDetails !== null ? <LorryReceipt lrDetails={lrDetails} /> : null}
     </div>
   );
 };

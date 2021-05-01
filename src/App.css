@@ -167,10 +167,6 @@ div::-webkit-scrollbar-thumb {
   background-color: #007bff66;
 }
 
-thead,
-tbody {
-  display: block;
-}
 tbody {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -228,7 +224,7 @@ h1 {
 }
 .lrdetails-container {
   width: 1090px;
-  height: 495px;
+  height: 550px;
   background: #ffffff;
   box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
   border-radius: 0px;
@@ -279,6 +275,7 @@ h1 {
 .lr-td-fright {
   min-width: 160px;
   border: 1px solid;
+  padding: 10px;
 }
 .lrDetails-th {
   border: 1px solid;

@@ -68,52 +68,14 @@ const Global = createGlobalStyle`
   }
 `;
 
-const DownloadPDF = ({vcId, status}) => {
+const DownloadPDF = ({vcId, status, VCStored, vcUrl}) => {
   const user = getUser();
-  const [lrDetails, setLrDetails] = useState({
-    consignee: {
-      name: "Mandar Tawde",
-      address: "Mumbai",
-      mobileNumber: "7303399868",
-    },
-    consigner: {
-      name: "Mandar Tawde",
-      address: "Mumbai",
-      mobileNumber: "7303399867",
-    },
-    consignments: [
-      {
-        quantity: "3",
-        weight: "100 KG",
-        description: "Raw agricultural material",
-      },
-      {quantity: "10", weight: "200 KG", description: "Textile goods"},
-    ],
-    date: "Tue Apr 27 08:17:28 UTC 2021",
-    driver: {
-      name: "Mandar Tawde",
-      address: "Mumbai",
-      mobileNumber: "7303399866",
-    },
-    freightCharge: {freight: "10000 Rs", advance: "5000 Rs", toPay: "5000 Rs"},
-    loadingAddress: "LUDHIYANA",
-    receiptNumber: "LRN0000011",
-    totalWeight: "300 KG",
-    transporter: {
-      name: "Tanvi",
-      address: "Address",
-      mobileNumber: "9158447698",
-    },
-    unloadingAddress: "MUMBAI",
-    vcId: "claimId:e237514acdf4a0a7",
-    status: "BOOKED",
-    vehicleNumber: "MH47B1936",
-  });
+  const [lrDetails, setLrDetails] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const download = () => {
     console.log("Download PDF");
     setShowModal(true);
-    if (vcId) {
+    if (vcId && VCStored) {
       axios
         .get(WALLET_CREDENTIALS_URL + vcId, {
           headers: {
@@ -133,6 +95,19 @@ const DownloadPDF = ({vcId, status}) => {
             console.log(error);
           }
         );
+    } else if (vcUrl !== undefined) {
+      console.log(vcUrl);
+      axios.get(vcUrl).then(
+        response => {
+          if (response.status === 200) {
+            const res = response.data.credentialSubject.data;
+            setLrDetails({...res, vcId: vcId, status: status});
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   };
 
@@ -146,6 +121,7 @@ const DownloadPDF = ({vcId, status}) => {
           lrDetails={lrDetails}
           showModal={showModal}
           setShowModal={setShowModal}
+          VCStored={VCStored}
         />
       ) : null}
     </>
@@ -154,7 +130,7 @@ const DownloadPDF = ({vcId, status}) => {
 
 export default DownloadPDF;
 
-export const CreatePDF = ({lrDetails, showModal, setShowModal}) => {
+export const CreatePDF = ({lrDetails, showModal, setShowModal, VCStored}) => {
   const [printContent, setPrintContent] = useState(1);
   const handleClose = () => setShowModal(false);
   return (
@@ -182,8 +158,12 @@ export const CreatePDF = ({lrDetails, showModal, setShowModal}) => {
           <Button
             variant="primary"
             onClick={() => {
-              createPdfFromHtml(printContent);
-              setShowModal(false);
+              if (VCStored) {
+                createPdfFromHtml(printContent);
+                setShowModal(false);
+              } else {
+                alert("Kindly Approve VC to Download");
+              }
             }}
           >
             Download

@@ -13,34 +13,45 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user && user.isLogin === "true") {
-      axios
-        .get(`${LORRY_RECEIPT_URL}?role=${user.role}`, {
-          headers: {Authorization: "Bearer " + user.accessToken},
-        })
-        .then(
-          response => {
-            if (response.status === 200) {
-              if (
-                response.data.lorryReceipts !== undefined &&
-                response.data.lorryReceipts !== null
-              ) {
-                const res = response.data.lorryReceipts;
-                const list = res.filter(f => f.vcId !== undefined);
-                setLRList(list);
-              }
-            }
-          },
-          error => {
-            console.log(error);
-          }
-        );
+      getLRList();
     } else history.push("/");
   }, []);
 
+  useEffect(() => {
+    console.log("lrList updated");
+  }, [lrList]);
+
+  const getLRList = () => {
+    axios
+      .get(`${LORRY_RECEIPT_URL}?role=${user.role}`, {
+        headers: {Authorization: "Bearer " + user.accessToken},
+      })
+      .then(
+        response => {
+          if (response.status === 200) {
+            if (
+              response.data.lorryReceipts !== undefined &&
+              response.data.lorryReceipts !== null
+            ) {
+              const res = response.data.lorryReceipts;
+              const list = res.filter(f => f.vcId !== undefined);
+              setLRList(list);
+            }
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  };
+
   const updateStatus = (action, lr) => {
+    console.log("updateStatus " + action);
+    console.log(lr);
+
     axios
       .post(
-        {UPDATE_STATUS_URL},
+        UPDATE_STATUS_URL,
         {
           lorryReceiptId: lr.lorryReceipt.id,
           action: action,
@@ -53,6 +64,7 @@ const Dashboard = () => {
       .then(
         response => {
           if (response.status === 200) {
+            window.location.pathname = "/dashboard";
           } else {
             alert(response.data.message);
           }
@@ -93,7 +105,7 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {lrList.map((lr, i) => (
-                <tr key={i}>
+                <tr key={lr.lorryReceipt.id}>
                   <td
                     className="dashboard-link"
                     onClick={() =>
@@ -102,6 +114,8 @@ const Dashboard = () => {
                         state: {
                           vcId: lr.vcId,
                           status: lr.lorryReceipt.status,
+                          VCStored: lr.VCStored,
+                          vcUrl: lr.vcUrl,
                         },
                       })
                     }
@@ -118,21 +132,18 @@ const Dashboard = () => {
                   <td>{lr.consignee.fullName}</td>
                   <td>{lr.lorryReceipt.createdAt}</td>
                   <td>
-                    <Form.Control
-                      selected={lr.lorryReceipt.status}
-                      as="select"
-                      title="Status"
-                      onChange={e => updateStatus(e.target.value, lr)}
-                    >
-                      <option value="Loaded">Loaded</option>
-                      <option value="InTransit">InTransit</option>
-                      <option value="Delivered">Delivered</option>
-                    </Form.Control>
+                    <ActionChange
+                      updateStatus={updateStatus}
+                      lr={lr}
+                      role={user.role}
+                    />
                   </td>
                   <td>
                     <DownloadPDF
                       vcId={lr.vcId}
                       status={lr.lorryReceipt.status}
+                      VCStored={lr.VCStored}
+                      vcUrl={lr.vcUrl}
                     />
                   </td>
                 </tr>
@@ -140,10 +151,56 @@ const Dashboard = () => {
             </tbody>
           </Table>
         )}
-        ;
       </div>
     </div>
   );
 };
 
 export default Dashboard;
+
+const ActionChange = ({updateStatus, lr, role}) => {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    console.log(lr.lorryReceipt.status + " " + role);
+    const status = lr.lorryReceipt.status;
+    setAction(status, role, lr);
+  }, []);
+
+  const setAction = (status, role, lr) => {
+    console.log("ActionChange");
+    if (status === "CANCELLED" || status === "COMPLETED") setOptions([status]);
+    else if (lr.VCStored === false) setOptions([status, "APPROVE"]);
+    else if (role === "Transporter") {
+      if (status === "BOOKED") setOptions([status, "CANCELLED"]);
+      else setOptions([status]);
+    } else if (role === "Consigner") {
+      if (status === "BOOKED") setOptions([status, "PICKUP", "CANCELLED"]);
+      else setOptions([status]);
+    } else if (role === "Driver") {
+      if (status === "PICKEDUP") setOptions([status, "PICKUP"]);
+      else if (status === "DELAYED") setOptions([status, "INTRANSIT"]);
+      else if (status === "INTRANSIT")
+        setOptions([status, "DELAYED", "DELIVERY"]);
+      else setOptions([status]);
+    } else if (role === "Consignee") {
+      if (status === "DELIVERED") setOptions([status, "DELIVERY", "DECLINED"]);
+      else setOptions([status]);
+    }
+  };
+
+  return (
+    <Form.Control
+      as="select"
+      disabled={options.length === 1 ? true : false}
+      defaultValue={lr.lorryReceipt.status}
+      onChange={e => updateStatus(e.target.value, lr)}
+    >
+      {options.map((option, i) => (
+        <option value={option} key={i}>
+          {option}
+        </option>
+      ))}
+    </Form.Control>
+  );
+};

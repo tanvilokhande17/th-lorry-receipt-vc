@@ -9,3 +9,7 @@ export const UPDATE_STATUS_URL = `${BASE_URL}${ENV}/lorryreceipt/action`;
 
 export const WALLET_CREDENTIALS_URL =
   "https://cloud-wallet-api.prod.affinity-project.org/api/v1/wallet/credentials/";
+
+  export const VERIFICATION_URL = `${BASE_URL}${ENV}/lorryreceipt/verification`;
+
+  

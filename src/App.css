@@ -174,7 +174,7 @@ tbody {
 }
 td,
 th {
-  min-width: 155px;
+  min-width: 141px;
   max-width: 155px; /*180*/
 }
 tbody::-webkit-scrollbar {
@@ -326,4 +326,17 @@ form {
   list-style-type: decimal;
   margin-left: 44px;
 }
+.btn-light:hover {
+  background-color: #1a67b3;
+}
+.QrCodeModal{
+  width: 80%;
+}
+.QRDetails-content{
+    padding: 66px;
+    border: 1px solid black;
+    font-size: 14px;
+    background: #dee2e6;
+}
+
 

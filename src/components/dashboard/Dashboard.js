@@ -5,6 +5,7 @@ import DownloadPDF from "../downloadPdf/DownloadPDF";
 import axios from "axios";
 import {LORRY_RECEIPT_URL, UPDATE_STATUS_URL} from "../util/Constant";
 import {getUser} from "../util/User";
+import GenerateQR from "../downloadPdf/GenerateQR";
 
 const Dashboard = () => {
   const [lrList, setLRList] = useState([]);
@@ -100,6 +101,7 @@ const Dashboard = () => {
                 <th>Consignee</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>verification</th>
                 <th>Download PDF</th>
               </tr>
             </thead>
@@ -121,6 +123,7 @@ const Dashboard = () => {
                     }
                   >
                     {lr.lorryReceipt.receiptNumber}
+                    
                   </td>
                   <td>
                     {lr.vcId !== undefined
@@ -138,7 +141,14 @@ const Dashboard = () => {
                       role={user.role}
                     />
                   </td>
-                  
+                  <td>
+                    <GenerateQR
+                      lorryReceiptId={lr.lorryReceipt.id}
+                      role={user.role}
+                      VCStored={lr.VCStored}
+                      vcUrl={lr.vcUrl}
+                    />
+                  </td>
                   <td>
                     <DownloadPDF
                       vcId={lr.vcId}

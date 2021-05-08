@@ -7,6 +7,7 @@ import LRDetails from "./components/dashboard/LRDetails";
 import Footer from "./components/common/Footer";
 import generateLR from "./components/dashboard/GenerateLR";
 import PolicyDocument from "./components/common/PolicyDocument";
+import QRDetails from "./components/dashboard/QrDetails"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/lr-details" component={LRDetails}></Route>
           <Route path="/generateLR" component={generateLR}></Route>
           <Route path="/projectDetails" component={PolicyDocument}></Route>
+          <Route path="/qrDetails/:id" render={(props) => <QRDetails {...props} />}></Route>
         </Switch>
       </Router>
       <Footer />

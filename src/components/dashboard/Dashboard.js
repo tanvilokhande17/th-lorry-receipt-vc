@@ -123,7 +123,6 @@ const Dashboard = () => {
                     }
                   >
                     {lr.lorryReceipt.receiptNumber}
-                    
                   </td>
                   <td>
                     {lr.vcId !== undefined
@@ -133,7 +132,15 @@ const Dashboard = () => {
                   <td>{lr.transporter.fullName}</td>
                   <td>{lr.consigner.fullName}</td>
                   <td>{lr.consignee.fullName}</td>
-                  <td>{lr.lorryReceipt.createdAt}</td>
+                  <td>
+                    {new Date(lr.lorryReceipt.createdAt).getDate() +
+                      "-" +
+                      parseInt(
+                        new Date(lr.lorryReceipt.createdAt).getMonth() + 1
+                      ) +
+                      "-" +
+                      new Date(lr.lorryReceipt.createdAt).getFullYear()}
+                  </td>
                   <td>
                     <ActionChange
                       updateStatus={updateStatus}

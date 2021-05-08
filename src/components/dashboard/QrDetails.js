@@ -1,35 +1,30 @@
 import React, {useState, useEffect, useRef} from "react";
 import icon from "./../../images/icon2.jpg";
-import {useHistory, useLocation} from "react-router";
 import axios from "axios";
-import { VERIFICATION_URL } from "../util/Constant";
+import {VERIFICATION_URL} from "../util/Constant";
 
+const QrDetails = () => {
+  const {vcId, status} = useState(null);
+  const [lrDetails, setLrDetails] = useState(null);
+  const [vcStatus, setVcStatus] = useState(null);
+  let Path = window.location.pathname;
+  console.log(Path);
+  Path = Path.split("/", 3);
+  console.log(Path[2]);
+  let passKey = Path[2];
 
-const QrDetails = ({e}) => {
- 
-    const location = useLocation();
-    const {vcId, status} = useState(null);
-    const [lrDetails, setLrDetails] = useState(null);
-    const  [vcStatus, setVcStatus] = useState(null);
-    let Path = window.location.pathname;
-    console.log(Path);
-    Path = Path.split("/",3);
-    console.log(Path[2])
-    let passKey = Path[2];
-  
-   
-    useEffect(() => {
-        if(passKey){
-    axios.get(VERIFICATION_URL + "/" + passKey).then(
+  useEffect(() => {
+    if (passKey) {
+      axios.get(VERIFICATION_URL + "/" + passKey).then(
         response => {
-            console.log(response.data);
+          console.log(response.data);
           if (response.status === 200) {
             if (response.data.vcDetails) {
-            const res = response.data.vcDetails.credentialSubject;
-           
-            console.log(res);
-            setVcStatus(response.data.lorryReceipt.status);
-            setLrDetails({...res, vcId: vcId, status: status});
+              const res = response.data.vcDetails.credentialSubject;
+
+              console.log(res);
+              setVcStatus(response.data.lorryReceipt.status);
+              setLrDetails({...res, vcId: vcId, status: status});
             }
           }
         },
@@ -38,46 +33,36 @@ const QrDetails = ({e}) => {
         }
       );
     }
+  }, []);
 
-    }, []);
-
-
-   
-    
-   
-   
-    return (
-    
-        <div className="lrdetails-container">
+  return (
+    <div className="lrdetails-container">
       <div style={{display: "flex", flexDirection: "row"}}>
         <span className="lrdetails-header" style={{flex: 4}}>
           Lorry Receipt Details
         </span>
-        
       </div>
 
-      {lrDetails !== null ? <LRDetails 
-      lrDetails={lrDetails}  
-      vcStatus = {vcStatus}
-      /> : 
-      <div className="lrDetails-content">
-      <span className="lrdetails-header" style={{flex: 4}}>
-      Lorry Receipt not found
-    </span>
-    </div>
-     }
+      {lrDetails !== null ? (
+        <LRDetails lrDetails={lrDetails} vcStatus={vcStatus} />
+      ) : (
+        <div className="lrDetails-content">
+          <span className="lrdetails-header" style={{flex: 4}}>
+            Lorry Receipt not found
+          </span>
+        </div>
+      )}
     </div>
   );
 };
 
 export default QrDetails;
 
-
-export const LRDetails = ({ lrDetails, vcStatus }) => {
-    console.log(vcStatus);
-    return (
-        <>
-           {lrDetails ? (
+export const LRDetails = ({lrDetails, vcStatus}) => {
+  console.log(vcStatus);
+  return (
+    <>
+      {lrDetails ? (
         <div className="lrDetails-content">
           <div className="lrDetails-header">
             <div style={{flex: 1}}>
@@ -206,7 +191,6 @@ export const LRDetails = ({ lrDetails, vcStatus }) => {
           <div style={{display: "flex", flexDirection: "row"}}></div>
         </div>
       ) : null}
-          
-        </>
-      );
+    </>
+  );
 };

@@ -300,43 +300,55 @@ form {
 }
 .policy-document {
   font-weight: 300;
-    font-size: 14px;
-    line-height: 25px;
-    width: 150px;
+  font-size: 14px;
+  line-height: 25px;
+  width: 150px;
 }
-.policy-document-header{
-  margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;
+.policy-document-header {
+  margin-top: 0cm;
+  margin-right: 0cm;
+  margin-bottom: 8pt;
+  margin-left: 0cm;
+  line-height: 107%;
+  font-size: 15px;
+  font-family: "Calibri", sans-serif;
+  text-align: center;
 }
-.policy-span{
-  font-size:16px;line-height:107%;
+.policy-span {
+  font-size: 16px;
+  line-height: 107%;
 }
-.policy-document-text{
-  margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:2cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;
+.policy-document-text {
+  margin-top: 0cm;
+  margin-right: 0cm;
+  margin-bottom: 8pt;
+  margin-left: 2cm;
+  line-height: 107%;
+  font-size: 15px;
+  font-family: "Calibri", sans-serif;
 }
 .hidden {
-  display: none
+  display: none;
 }
-.p-text{
-  font-family: 'Times New Roman';
+.p-text {
+  font-family: "Times New Roman";
 }
-.ul-text{
+.ul-text {
   list-style-type: disc;
 }
-.ol-text{
+.ol-text {
   list-style-type: decimal;
   margin-left: 44px;
 }
 .btn-light:hover {
   background-color: #1a67b3;
 }
-.QrCodeModal{
+.QrCodeModal {
   width: 80%;
 }
-.QRDetails-content{
-    padding: 66px;
-    border: 1px solid black;
-    font-size: 14px;
-    background: #dee2e6;
+.QRDetails-content {
+  padding: 66px;
+  border: 1px solid black;
+  font-size: 14px;
+  background: #dee2e6;
 }
-
-

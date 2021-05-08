@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
+
 import { createGlobalStyle } from "styled-components";
 import { VERIFICATION_URL } from "../util/Constant";
 import { getUser } from "../util/User";
@@ -165,15 +166,8 @@ export const QRCodeData = ({ showModal, setShowModal, qrUrl, setQrUrl }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-                createPdfFromHtml(printContent);
-                setShowModal(false);
-            }}
-          >
-            Download
-          </Button>
+          
+           
         </Modal.Footer>
         </div>
       </Modal>

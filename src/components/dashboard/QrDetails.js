@@ -24,12 +24,13 @@ const QrDetails = ({e}) => {
         response => {
             console.log(response.data);
           if (response.status === 200) {
+            if (response.data.vcDetails) {
             const res = response.data.vcDetails.credentialSubject;
+           
             console.log(res);
             setVcStatus(response.data.lorryReceipt.status);
             setLrDetails({...res, vcId: vcId, status: status});
-            
-           
+            }
           }
         },
         error => {
@@ -58,7 +59,13 @@ const QrDetails = ({e}) => {
       {lrDetails !== null ? <LRDetails 
       lrDetails={lrDetails}  
       vcStatus = {vcStatus}
-      /> : null}
+      /> : 
+      <div className="lrDetails-content">
+      <span className="lrdetails-header" style={{flex: 4}}>
+      Lorry Receipt not found
+    </span>
+    </div>
+     }
     </div>
   );
 };

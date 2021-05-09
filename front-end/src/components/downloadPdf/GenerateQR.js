@@ -11,11 +11,7 @@ const GenerateQR = ({lorryReceiptId, role}) => {
   const [qrUrl, setQrUrl] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const download = () => {
-    console.log("Generate QR ");
-    console.log("vcId--->" + lorryReceiptId);
-    console.log("status--->" + role);
-    console.log("VERIFICATION_URL--->" + VERIFICATION_URL);
-    console.log("user.accessToken--->" + user.accessToken);
+    
 
     if (lorryReceiptId && role) {
       const param = {
@@ -32,7 +28,6 @@ const GenerateQR = ({lorryReceiptId, role}) => {
           response => {
             if (response.status === 200) {
               const res = response.data.qrCode;
-              console.log("res----->" + res);
               if (res !== undefined && res !== null) {
                 setQrUrl(res);
                 setShowModal(true);

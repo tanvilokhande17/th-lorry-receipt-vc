@@ -80,7 +80,7 @@ const LorryReceipt = ({lrDetails}) => {
                   <th className="lrDetails-th">Weight</th>
                   <th className="lrDetails-th">Description</th>
                   <th className="lrDetails-th"></th>
-                  <th className="lrDetails-th">Freight charges</th>
+                  <th className="lrDetails-th">Freight charges </th>
                 </tr>
               </thead>
               <tbody>
@@ -112,19 +112,19 @@ const LorryReceipt = ({lrDetails}) => {
 
                   <td className="lr-td-fright">Freight</td>
                   <td className="lr-td-fright">
-                    {lrDetails.freightCharge.freight}
+                  ₹ {lrDetails.freightCharge.freight}
                   </td>
                 </tr>
                 <tr>
                   <td className="lr-td-fright">Advance</td>
                   <td className="lr-td-fright">
-                    {lrDetails.freightCharge.advance}
+                  ₹  {lrDetails.freightCharge.advance}
                   </td>
                 </tr>
                 <tr>
                   <td className="lr-td-fright">To Pay/Paid</td>
                   <td className="lr-td-fright">
-                    {lrDetails.freightCharge.toPay}
+                  ₹ {lrDetails.freightCharge.toPay}
                   </td>
                 </tr>
               </tbody>

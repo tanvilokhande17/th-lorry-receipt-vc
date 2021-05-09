@@ -82,7 +82,7 @@ const LorryReceiptPDF = ({lrDetails}) => {
                   <th className="lr-pdf-th">Weight</th>
                   <th className="lr-pdf-th">Description</th>
                   <th className="lr-pdf-th"></th>
-                  <th className="lr-pdf-th">Freight charges</th>
+                  <th className="lr-pdf-th">Freight charges </th>
                 </tr>
               </thead>
               <tbody>
@@ -90,7 +90,7 @@ const LorryReceiptPDF = ({lrDetails}) => {
                   <td className="lr-pdf-th" rowSpan="3">
                     {lrDetails.consignments.map((c, i) => (
                       <div key={i} style={{marginBottom: 10}}>
-                        {c.quantity}
+                         {c.quantity}
                       </div>
                     ))}
                     <div>&nbsp;</div>
@@ -114,18 +114,18 @@ const LorryReceiptPDF = ({lrDetails}) => {
 
                   <td className="lr-pdf-th">Freight</td>
                   <td className="lr-pdf-th">
-                    {lrDetails.freightCharge.freight}
+                  ₹ {lrDetails.freightCharge.freight}
                   </td>
                 </tr>
                 <tr>
                   <td className="lr-pdf-th">Advance</td>
                   <td className="lr-pdf-th">
-                    {lrDetails.freightCharge.advance}
+                  ₹ {lrDetails.freightCharge.advance}
                   </td>
                 </tr>
                 <tr>
                   <td className="lr-pdf-th">To Pay/Paid</td>
-                  <td className="lr-pdf-th">{lrDetails.freightCharge.toPay}</td>
+                   <td className="lr-pdf-th"> ₹ {lrDetails.freightCharge.toPay}</td>
                 </tr>
               </tbody>
             </table>

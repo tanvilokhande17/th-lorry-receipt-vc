@@ -7,6 +7,8 @@ const QrDetails = () => {
   const {vcId, status} = useState(null);
   const [lrDetails, setLrDetails] = useState(null);
   const [vcStatus, setVcStatus] = useState(null);
+  const  [showDetails, setShowDetails] = useState(false);
+  const  [vcNo, setVcNo] = useState(null);
   let Path = window.location.pathname;
   console.log(Path);
   Path = Path.split("/", 3);
@@ -17,22 +19,27 @@ const QrDetails = () => {
     if (passKey) {
       axios.get(VERIFICATION_URL + "/" + passKey).then(
         response => {
-          console.log(response.data);
+         console.log(response.data)
+         setTimeout(() => {
           if (response.status === 200) {
             if (response.data.vcDetails) {
-              const res = response.data.vcDetails.credentialSubject;
-
-              console.log(res);
-              setVcStatus(response.data.lorryReceipt.status);
-              setLrDetails({...res, vcId: vcId, status: status});
+            const res = response.data.vcDetails.credentialSubject;
+            setVcNo(response.data.vcDetails.id);
+            setVcStatus(response.data.lorryReceipt.status);
+            setLrDetails({...res, vcId: vcId, status: status});
             }
+          }else{
+            setShowDetails(true);
           }
+        }, 500);
         },
         error => {
           console.log(error);
         }
       );
+  
     }
+   
   }, []);
 
   return (
@@ -43,22 +50,26 @@ const QrDetails = () => {
         </span>
       </div>
 
-      {lrDetails !== null ? (
-        <LRDetails lrDetails={lrDetails} vcStatus={vcStatus} />
-      ) : (
-        <div className="lrDetails-content">
-          <span className="lrdetails-header" style={{flex: 4}}>
-            Lorry Receipt not found
-          </span>
-        </div>
-      )}
+      {lrDetails !== null ? 
+      <LRDetails 
+      lrDetails={lrDetails}  
+      vcStatus = {vcStatus}
+      vcNo = {vcNo}
+      /> : null }
+      {showDetails === true && lrDetails === null?
+      <div className="lrDetails-content">
+      <span className="lrdetails-header" style={{flex: 4}}>
+      Lorry Receipt not found
+    </span>
+    </div>
+     : null}
     </div>
   );
 };
 
 export default QrDetails;
 
-export const LRDetails = ({lrDetails, vcStatus}) => {
+export const LRDetails = ({lrDetails, vcStatus,vcNo}) => {
   console.log(vcStatus);
   return (
     <>
@@ -87,7 +98,7 @@ export const LRDetails = ({lrDetails, vcStatus}) => {
               </div>
               <div>
                 <span style={{fontWeight: 600}}>VC ID: </span>
-                {lrDetails.data.vcId}
+                {vcNo}
               </div>
             </div>
           </div>

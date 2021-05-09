@@ -149,20 +149,26 @@ const Dashboard = () => {
                     />
                   </td>
                   <td>
+                  {lr.lorryReceipt.status === "CANCELLED" ?
+                   null
+                    : 
                     <GenerateQR
-                      lorryReceiptId={lr.lorryReceipt.id}
-                      role={user.role}
-                      VCStored={lr.VCStored}
-                      vcUrl={lr.vcUrl}
-                    />
+                    lorryReceiptId={lr.lorryReceipt.id}
+                    role={user.role}
+                    VCStored={lr.VCStored}
+                    vcUrl={lr.vcUrl}
+                  />}
                   </td>
                   <td>
+                  {lr.lorryReceipt.status === "CANCELLED" ?
+                   null
+                    :  
                     <DownloadPDF
-                      vcId={lr.vcId}
-                      status={lr.lorryReceipt.status}
-                      VCStored={lr.VCStored}
-                      vcUrl={lr.vcUrl}
-                    />
+                    vcId={lr.vcId}
+                    status={lr.lorryReceipt.status}
+                    VCStored={lr.VCStored}
+                    vcUrl={lr.vcUrl}
+                  />}
                   </td>
                 </tr>
               ))}

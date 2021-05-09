@@ -1,0 +1,13 @@
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\responses\SignInResponse.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\LambdaFunctionHandler.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\repositories\UserRoleRepository.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\configs\ApplicationProperties.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\responses\AffinidiSignInResponse.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\repositories\UserRepository.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\configs\MySqlConfig.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\constants\Constants.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\services\SignInService.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\requests\AffinidiSignInRequest.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\daos\User.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\requests\SignInRequest.java
+C:\Users\mandar\eclipse-workspace\SignIn\src\main\java\com\amazonaws\lambda\signin\models\daos\UserRole.java

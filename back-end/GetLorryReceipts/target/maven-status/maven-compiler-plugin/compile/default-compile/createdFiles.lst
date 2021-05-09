@@ -1,0 +1,17 @@
+com\amazonaws\lambda\getlorryreceipts\models\daos\LorryReceiptUserRole.class
+com\amazonaws\lambda\getlorryreceipts\services\GetLorryReceiptsService.class
+com\amazonaws\lambda\getlorryreceipts\repositories\UserRepository.class
+com\amazonaws\lambda\getlorryreceipts\repositories\LorryReceiptRepository.class
+com\amazonaws\lambda\getlorryreceipts\models\requests\GetLorryReceiptsRequest.class
+com\amazonaws\lambda\getlorryreceipts\models\responses\GetLorryReceiptsResponseDetails.class
+com\amazonaws\lambda\getlorryreceipts\repositories\LorryReceiptUserRoleRepository.class
+com\amazonaws\lambda\getlorryreceipts\models\entities\LoggedInUserCheckDetails.class
+com\amazonaws\lambda\getlorryreceipts\models\responses\GetLorryReceiptsResponse.class
+com\amazonaws\lambda\getlorryreceipts\models\daos\User.class
+com\amazonaws\lambda\getlorryreceipts\models\daos\LorryReceipt.class
+com\amazonaws\lambda\getlorryreceipts\configs\MySqlConfig.class
+com\amazonaws\lambda\getlorryreceipts\models\daos\UserRole.class
+com\amazonaws\lambda\getlorryreceipts\constants\Constants.class
+com\amazonaws\lambda\getlorryreceipts\configs\ApplicationProperties.class
+com\amazonaws\lambda\getlorryreceipts\LambdaFunctionHandler.class
+com\amazonaws\lambda\getlorryreceipts\repositories\UserRoleRepository.class

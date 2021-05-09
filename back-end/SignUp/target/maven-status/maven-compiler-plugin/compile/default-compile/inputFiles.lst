@@ -1,0 +1,12 @@
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\configs\MySqlConfig.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\models\responses\AffinidiSignUpResponse.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\configs\ApplicationProperties.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\models\daos\User.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\models\daos\UserRole.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\models\requests\SignUpRequest.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\services\SignUpService.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\LambdaFunctionHandler.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\repositories\UserRepository.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\constants\Constants.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\models\requests\AffinidiSignUpRequest.java
+C:\Users\mandar\eclipse-workspace\SignUp\src\main\java\com\amazonaws\lambda\signup\repositories\UserRoleRepository.java

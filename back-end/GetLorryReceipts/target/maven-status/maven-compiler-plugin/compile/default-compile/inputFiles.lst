@@ -1,0 +1,17 @@
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\daos\UserRole.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\repositories\LorryReceiptUserRoleRepository.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\responses\GetLorryReceiptsResponseDetails.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\configs\MySqlConfig.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\daos\User.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\constants\Constants.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\entities\LoggedInUserCheckDetails.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\configs\ApplicationProperties.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\requests\GetLorryReceiptsRequest.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\daos\LorryReceipt.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\repositories\LorryReceiptRepository.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\responses\GetLorryReceiptsResponse.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\repositories\UserRepository.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\services\GetLorryReceiptsService.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\repositories\UserRoleRepository.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\LambdaFunctionHandler.java
+C:\Users\mandar\eclipse-workspace\GetLorryReceipts\src\main\java\com\amazonaws\lambda\getlorryreceipts\models\daos\LorryReceiptUserRole.java

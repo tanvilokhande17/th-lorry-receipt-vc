@@ -1,0 +1,12 @@
+com\amazonaws\lambda\signup\configs\MySqlConfig.class
+com\amazonaws\lambda\signup\repositories\UserRepository.class
+com\amazonaws\lambda\signup\models\responses\AffinidiSignUpResponse.class
+com\amazonaws\lambda\signup\repositories\UserRoleRepository.class
+com\amazonaws\lambda\signup\models\daos\UserRole.class
+com\amazonaws\lambda\signup\configs\ApplicationProperties.class
+com\amazonaws\lambda\signup\services\SignUpService.class
+com\amazonaws\lambda\signup\LambdaFunctionHandler.class
+com\amazonaws\lambda\signup\models\requests\AffinidiSignUpRequest.class
+com\amazonaws\lambda\signup\constants\Constants.class
+com\amazonaws\lambda\signup\models\daos\User.class
+com\amazonaws\lambda\signup\models\requests\SignUpRequest.class

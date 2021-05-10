@@ -35,7 +35,7 @@ function PolicyDocument({ }) {
       <p><center><span style={{flex: 5}}>
         <img style={{marginBottom : "50px", boxShadow : "0 3px 8px rgb(0 0 0 / 10%)"}} className="" src={flow} />
       </span></center></p>
-    </div>
+    </div> 
   );
 }
 

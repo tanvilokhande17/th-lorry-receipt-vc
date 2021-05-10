@@ -26,7 +26,7 @@ const SignUp = ({setPage}) => {
   const signupAccount = e => {
     if (!passwordReg.test(password)) {
       alert("Password must contain at least one number, one uppercase, lowercase letter, and one special characters");
-    } else {
+    } else { 
     e.preventDefault();
     setSubmitDisabled(true);
     axios

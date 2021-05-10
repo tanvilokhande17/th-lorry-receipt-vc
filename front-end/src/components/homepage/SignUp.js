@@ -22,7 +22,11 @@ const SignUp = ({setPage}) => {
   const [address, setAddress] = useState("");
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
+  const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/gm;
   const signupAccount = e => {
+    if (!passwordReg.test(password)) {
+      alert("Password must contain at least one number, one uppercase, lowercase letter, and one special characters");
+    } else {
     e.preventDefault();
     setSubmitDisabled(true);
     axios
@@ -76,6 +80,7 @@ const SignUp = ({setPage}) => {
           setSubmitDisabled(false);
         }
       );
+    }
   };
 
   useEffect(() => {

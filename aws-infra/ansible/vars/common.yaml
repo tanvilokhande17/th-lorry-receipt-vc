@@ -1,0 +1,7 @@
+---
+stacks:
+        network: AffinidiNetwork
+        web: WebInstanceStack
+        app : AppInstanceStack
+        #db : DbInstanceStack
+        #eip : WebInstanceEIPStack

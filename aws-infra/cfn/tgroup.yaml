@@ -1,0 +1,87 @@
+Description: >
+    This template deploys an Application Load Balancer that exposes external endpoint.
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VPC:
+        Type: AWS::EC2::VPC::Id
+        Description: Choose which VPC the Applicaion Load Balancer should be deployed to
+
+
+
+    WebSubnets:
+        Description: Choose which subnets the Applicaion Load Balancer should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+    SecurityGroup:
+        Description: Select the Security Group to apply to the Applicaion Load Balancer
+        Type: AWS::EC2::SecurityGroup::Id
+    Instance0Id:
+        Type: String
+
+   
+
+Resources:
+
+
+
+    LoadBalancerExternal:
+        Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+        Properties:
+            Scheme: internet-facing
+            Name: !Sub ${EnvironmentName}-LoadBalancer-External
+            Subnets: !Ref WebSubnets
+            SecurityGroups: 
+                - !Ref SecurityGroup
+            Tags: 
+                - Key: Name
+                  Value: !Ref EnvironmentName
+
+
+
+    LoadBalancerListenerExternalHttp:
+        Type: AWS::ElasticLoadBalancingV2::Listener
+        Properties:
+            LoadBalancerArn: !Ref LoadBalancerExternal
+            Port: 80
+            Protocol: HTTP
+            DefaultActions: 
+                - Type: forward
+                  TargetGroupArn: !Ref TargetGroupExternalHttp
+   
+    TargetGroupExternalHttp:
+        Type: AWS::ElasticLoadBalancingV2::TargetGroup
+        Properties:
+            Name: !Sub ${EnvironmentName}-ETG-Http
+            VpcId: !Ref VPC
+            Port: 80
+            Protocol: HTTP
+            TargetType: instance
+            Matcher: 
+                HttpCode: 200
+            HealthCheckIntervalSeconds: 10
+            HealthCheckPath: "/"
+            HealthCheckPort: "3000"
+            HealthCheckProtocol: HTTP
+            HealthCheckTimeoutSeconds: 5
+            HealthyThresholdCount: 2
+            UnhealthyThresholdCount: 2
+            Targets: 
+                - 
+                 Id: !Ref Instance0Id
+                 Port: 3000
+        
+Outputs:
+  LoadBalancer:
+    Description: A reference to the Application Load Balancer
+    Value: !Ref LoadBalancerExternal
+
+  LoadBalancerUrl:
+    Description: The URL of the ALB
+    Value: !GetAtt LoadBalancerExternal.DNSName
+
+
+  

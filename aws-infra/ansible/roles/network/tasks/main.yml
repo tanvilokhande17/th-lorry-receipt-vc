@@ -1,0 +1,64 @@
+---
+
+- name: Create EC2 instances for Affinidi PoCathon
+  cloudformation:
+    stack_name: "{{ stacks.network }}"
+    region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_KEY') }}"
+    state: present
+    template: "../cfn/bootstrap-private-network.yaml"
+    template_format: yaml
+    template_parameters:
+      StackName : "{{ bootstrap.StackName }}"
+      WebSubnet1CIDR : "{{ bootstrap.WebSubnet1CIDR }}"
+      AppSubnet1CIDR : "{{ bootstrap.AppSubnet1CIDR }}"
+      VpcCIDR : "{{ bootstrap.VpcCidrBlock }}"
+      InstanceType : "{{ bootstrap.InstanceType }}"
+      ImageId : "{{ bootstrap.AMI }}"
+      KeyName : "{{ bootstrap.KeyPairName }}"
+  register: BootstrapNetStack
+  when: stack_action == "create" 
+
+- name: Create ELB and Target group
+  cloudformation:
+    stack_name: "ELBTARGET"
+    region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_KEY') }}"
+    state: present
+    template: "../cfn/tgroup.yaml"
+    template_parameters:
+      VPC: "{{ BootstrapNetStack.stack_outputs.VPC }}"
+      WebSubnets: "{{ BootstrapNetStack.stack_outputs.WebSubnets }}"
+      SecurityGroup: "{{ BootstrapNetStack.stack_outputs.WebNetElbSecurityGroup }}"
+      EnvironmentName: "affinidi"
+      Instance0Id: "{{ BootstrapNetStack.stack_outputs.Instance0Id }}"
+  register: ELBSTACK
+  when: stack_action == "create" or stack_action == "create-elb"
+
+- name: Display the ELB endpoint
+  debug:
+    msg: "You can visit : {{ ELBSTACK.stack_outputs.LoadBalancerUrl }}"
+  when: stack_action == "create" or stack_action == "create-elb"
+
+- name: Remove ELB and Target Group 
+  cloudformation:
+    stack_name: "ELBTARGET"
+    region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_KEY') }}"
+    state: absent
+    template: "../cfn/tgroup.yaml"
+  when: stack_action == "delete" or stack_action == "delete-elb"
+
+- name: RemoveEC2 instances which were created for Affinidi PoCathon
+  cloudformation:
+    stack_name: "{{ stacks.network }}"
+    region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_KEY') }}"
+    state: absent
+    template: "../cfn/bootstrap-private-network.yaml"
+  when: stack_action == "delete" 
+

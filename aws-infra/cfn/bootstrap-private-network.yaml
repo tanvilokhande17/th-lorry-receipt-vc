@@ -1,0 +1,620 @@
+---
+Description:  This template deploys a VPC, with a public and private subnets. This is for affindi project. It contains a bastion host and an application host.
+
+Parameters:
+  StackName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+
+  VpcCIDR:
+    Description: Please enter the IP range (CIDR notation) for this VPC
+    Type: String
+    Default: 10.192.0.0/16
+
+  WebSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.10.0/24
+
+  WebSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.192.11.0/24
+
+  AppSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.20.0/24
+  DataSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.30.0/24
+
+
+  InstanceType:
+    Description: Bastion EC2 instance type
+    Type: String
+    Default: m1.medium
+ 
+  ImageId:
+    Description: Bastion EC2 Image Id
+    Type: String
+
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref StackName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref StackName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  WebSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref WebSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} Public Subnet (AZ1)
+
+  WebSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref WebSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} Public Subnet (AZ2)
+
+  AppSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref AppSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} App Private Subnet (AZ1)
+
+
+  DataSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref DataSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} Data Private Subnet (AZ1)
+
+
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref WebSubnet1
+
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref WebSubnet2
+  DefaultAppRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref AppRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} Public Routes
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  WebSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref WebSubnet1
+
+  WebSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref WebSubnet2
+
+
+  AppRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${StackName} App Routes (AZ1)
+
+
+
+  AppSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref AppRouteTable1
+      SubnetId: !Ref AppSubnet1
+
+
+
+  DynamodbEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - "*"
+            Resource:
+              - !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*
+      RouteTableIds:
+        - !Ref AppRouteTable1
+ 
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.dynamodb'
+      VpcId: !Ref VPC
+  CloudWatchEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      VpcEndpointType: "Interface"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - "*"
+            Resource:
+              - "*"
+
+
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.monitoring'
+      VpcId: !Ref VPC
+  CloudWatchLogsEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      VpcEndpointType: "Interface"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - "*"
+            Resource:
+              - !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:log*
+              - !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:log-group*
+
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.logs'
+      VpcId: !Ref VPC
+  CloudWatchEventsEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      VpcEndpointType: "Interface"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - "*"
+            Resource:
+              - "*"
+
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.events'
+      VpcId: !Ref VPC
+
+  BastionNetSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Security Group for Bastion
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - bastion
+            - net
+      - Key: Application
+        Value:
+          Ref: AWS::StackId
+
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Ref: ImageId
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      SecurityGroupIds:
+      - Ref: BastionNetSecurityGroup
+      SubnetId:
+        Ref: WebSubnet1
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - Bastion
+            - Instance
+  Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Ref: ImageId
+      InstanceType: t3.medium
+      KeyName:
+        Ref: KeyName
+      SecurityGroupIds:
+      - Ref: WebNetElbSecurityGroup
+      SubnetId:
+        Ref: AppSubnet1
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - Applications
+            - Instance
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - "\n"
+          - - "#!/bin/bash -v "
+            - export HOSTNAME=`curl http://169.254.169.254/latest/meta-data/hostname`
+            - yum update -y
+            - yum install git -y
+            - yum install -y gcc-c++ make
+            - curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+            - yum install -y nodejs
+            - mkdir -p /opt/git
+            - cd /opt/git
+            - git clone https://github.com/tanvilokhande17/th-lorry-receipt-vc.git
+            - cd th-lorry-receipt-vc/front-end/
+            - npm  install
+            - npm install pm2@latest -g
+            - sudo pm2 start npm -- start
+            
+
+  WebNetElbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Security Group for Web Net
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '443'
+        ToPort: '443'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '3000'
+        ToPort: '3001'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0  
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - web
+            - elb
+      - Key: Application
+        Value:
+          Ref: AWS::StackId
+
+  WebNetElbSecurityGroupSelfRef:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: WebNetElbSecurityGroup
+      IpProtocol: "-1"
+      FromPort: "-1"
+      ToPort: "-1"
+      SourceSecurityGroupId:
+        Ref: WebNetElbSecurityGroup
+    DependsOn: WebNetElbSecurityGroup
+
+
+  WebNetSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Security Group for Web Net
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        SourceSecurityGroupId:
+          Ref: BastionNetSecurityGroup
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: "-1"
+        FromPort: "-1"
+        ToPort: "-1"
+        SourceSecurityGroupId:
+          Ref: WebNetElbSecurityGroup
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - web
+            - net
+      - Key: Application
+        Value:
+          Ref: AWS::StackId
+
+  WebNetSecurityGroupSelfRef:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: WebNetSecurityGroup
+      IpProtocol: "-1"
+      FromPort: "-1"
+      ToPort: "-1"
+      SourceSecurityGroupId:
+        Ref: WebNetSecurityGroup
+    DependsOn: WebNetSecurityGroup
+
+  AppNetElbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Security Group for App Net
+      SecurityGroupIngress:
+      - IpProtocol: "-1"
+        FromPort: "-1"
+        ToPort: "-1"
+        SourceSecurityGroupId:
+          Ref: WebNetSecurityGroup
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - app
+            - elb
+      - Key: Application
+        Value:
+          Ref: AWS::StackId
+
+  AppNetElbSecurityGroupSelfRef:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: AppNetElbSecurityGroup
+      IpProtocol: "-1"
+      FromPort: "-1"
+      ToPort: "-1"
+      SourceSecurityGroupId:
+        Ref: AppNetElbSecurityGroup
+    DependsOn: AppNetElbSecurityGroup
+
+  AppNetSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Security Group for App Net
+      SecurityGroupIngress:
+      - IpProtocol: "-1"
+        FromPort: "-1"
+        ToPort: "-1"
+        SourceSecurityGroupId:
+          Ref: AppNetElbSecurityGroup
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        SourceSecurityGroupId:
+          Ref: BastionNetSecurityGroup
+      - IpProtocol: tcp
+        FromPort: '7000'
+        ToPort: '8000'
+        SourceSecurityGroupId:
+          Ref: BastionNetSecurityGroup
+      - IpProtocol: tcp
+        FromPort: '3000'
+        ToPort: '3001'
+        SourceSecurityGroupId:
+          Ref: AppNetElbSecurityGroup
+      - IpProtocol: "-1"
+        FromPort: "-1"
+        ToPort: "-1"
+        SourceSecurityGroupId:
+          Ref: WebNetSecurityGroup
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - '-'
+          - - Ref: StackName
+            - app
+            - net
+      - Key: Application
+        Value:
+          Ref: AWS::StackId
+
+  AppNetSecurityGroupSelfRef:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: AppNetSecurityGroup
+      IpProtocol: "-1"
+      FromPort: "-1"
+      ToPort: "-1"
+      SourceSecurityGroupId:
+        Ref: AppNetSecurityGroup
+    DependsOn: AppNetSecurityGroup
+
+ 
+
+  WebServerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: WebServerLogGroup
+      RetentionInDays: 30
+
+  AppServerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: AppServerLogGroup
+      RetentionInDays: 30
+
+Outputs:
+  PublicDnsName:
+    Description: Public dns of the machine
+    Value:
+      Fn::GetAtt: 
+      - Instance
+      - PublicDnsName
+  PublicIP:
+    Description: Public IP of the machine
+    Value:
+      Fn::GetAtt:
+      - Instance
+      - PublicIp
+
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+
+  WebSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref WebSubnet1, !Ref WebSubnet2 ]]
+
+  AppSubnets:
+    Description: A list of the App private subnets
+    Value: !Join [ ",", [ !Ref AppSubnet1 ]]
+
+
+  WebSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref WebSubnet1
+
+  AppSubnet1:
+    Description: A reference to the App private subnet in the 1st Availability Zone
+    Value: !Ref AppSubnet1
+
+
+
+  WebNetElbSecurityGroup:
+    Description: WebNetElbSecurityGroup
+    Value:
+      Ref: WebNetElbSecurityGroup
+
+  WebNetSecurityGroup:
+    Description: WebNetSecurityGroup
+    Value:
+      Ref: WebNetSecurityGroup
+
+  AppNetElbSecurityGroup:
+    Description: AppNetSecurityGroup
+    Value:
+      Ref: AppNetSecurityGroup
+
+  AppNetSecurityGroup:
+    Description: AppNetSecurityGroup
+    Value:
+      Ref: AppNetSecurityGroup
+
+
+
+  WebServerLogGroup:
+    Description: WebServerLogGroup
+    Value:
+      Ref: WebServerLogGroup
+
+  AppServerLogGroup:
+    Description: AppServerLogGroup
+    Value:
+      Ref: AppServerLogGroup
+  Instance0Id:
+    Value:
+      Ref: Instance1
+
